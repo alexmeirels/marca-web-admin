@@ -1,16 +1,18 @@
 import { Outlet } from "react-router-dom";
-import { Container, OutletContainer } from "./styles";
+import { Container, Content, OutletContainer } from "./styles";
 import Sidebar from "../../components/Sidebar";
-
+import HeaderMainLayout from "./components/header";
 
 export default function MainLayout() {
-
   return (
     <Container>
       <Sidebar />
-      <OutletContainer>
-        <Outlet />
-      </OutletContainer>
+      <Content>
+        <HeaderMainLayout />
+        <OutletContainer>
+          <Outlet />
+        </OutletContainer>
+      </Content>
     </Container>
   );
 }

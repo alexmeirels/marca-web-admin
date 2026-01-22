@@ -9,38 +9,81 @@ import {
   Box,
   Divider,
   Typography,
+  Button,
 } from "@mui/material";
-import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
-import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
-import EventNoteRoundedIcon from "@mui/icons-material/EventNoteRounded";
 import logoSidebar from "../../assets/logo-sidebar.png";
 import { Container } from "./styles";
+import Icon, { type IconName } from "../Icon";
 
-type LinkItem = {
+type ILinkItem = {
   to: string;
   label: string;
-  icon: React.ReactNode;
+  icon: IconName;
   match: (pathname: string) => boolean;
 };
 
-const links: LinkItem[] = [
+export interface ISectionItem {
+  title: string;
+  links: ILinkItem[];
+}
+
+const sections: ISectionItem[] = [
   {
-    to: "/",
-    label: "Home",
-    icon: <HomeRoundedIcon />,
-    match: (p) => p === "/",
+    title: "PRINCIPAL",
+    links: [
+      {
+        to: "/dashboard",
+        label: "Dashboard",
+        icon: "dashboard",
+        match: (p) => p.startsWith("/dashboard"),
+      },
+      {
+        to: "/schedules",
+        label: "Agenda",
+        icon: "calendar",
+        match: (p) => p.startsWith("/schedules"),
+      },
+    ],
   },
   {
-    to: "/dashboard",
-    label: "Dashboard",
-    icon: <DashboardRoundedIcon />,
-    match: (p) => p.startsWith("/dashboard"),
+    title: "OPERAÇÃO",
+    links: [
+      {
+        to: "/schedules",
+        label: "Reservas",
+        icon: "lock",
+        match: (p) => p.startsWith("/a"),
+      },
+      {
+        to: "/schedules",
+        label: "Financeiro",
+        icon: "wallet",
+        match: (p) => p.startsWith("/a"),
+      },
+      {
+        to: "/schedules",
+        label: "Clientes",
+        icon: "usersGroup",
+        match: (p) => p.startsWith("/a"),
+      },
+    ],
   },
   {
-    to: "/schedules",
-    label: "Reservas",
-    icon: <EventNoteRoundedIcon />,
-    match: (p) => p.startsWith("/schedules"),
+    title: "GESTÃO",
+    links: [
+      {
+        to: "/schedules",
+        label: "Minhas Quadras",
+        icon: "balls",
+        match: (p) => p.startsWith("/a"),
+      },
+      {
+        to: "/schedules",
+        label: "Horários e Preços",
+        icon: "clock",
+        match: (p) => p.startsWith("/a"),
+      },
+    ],
   },
 ];
 
@@ -48,7 +91,7 @@ export default function Sidebar() {
   const { pathname } = useLocation();
 
   return (
-    <Container >
+    <Container>
       <Toolbar
         sx={{
           py: 3,
@@ -74,53 +117,120 @@ export default function Sidebar() {
           minHeight: 0, // importante p/ o overflow funcionar dentro do flex
         }}
       >
+        <Button
+          variant="contained"
+          sx={{
+            backgroundColor: "#FDB022",
+            padding: "10px 0px",
+            margin: "0px 16px",
+            borderRadius: 2,
+            textTransform: "none",
+            fontSize: 16,
+            fontWeight: 500,
+            alignItems: "center",
+            "& .MuiButton-startIcon": {
+              marginLeft: 0,
+              marginRight: 6,
+              display: "inline-flex",
+              alignItems: "center",
+            },
+            "&:hover": {
+              bgcolor: "#FDB022",
+              boxShadow: "none",
+            },
+            "&:focus": {
+              outline: "none",
+              boxShadow: "none",
+            },
+          }}
+          startIcon={<Icon name="plus" size={20} stroke="#060F20" />}
+          onClick={() => {}}
+        >
+          <Typography
+            sx={{
+              fontSize: 14,
+              fontWeight: 600,
+              color: "#060F20",
+              lineHeight: 1,
+            }}
+            fontWeight="bold"
+          >
+            {"Nova Reserva"}
+          </Typography>
+        </Button>
         <List sx={{ py: 1 }}>
-          {links.map((link) => {
-            const selected = link.match(pathname);
+          {sections.map((section) => {
             return (
-              <ListItemButton
-                key={link.to}
-                component={RouterLink}
-                to={link.to}
-                selected={selected}
-                sx={{
-                  mx: 3,
-                  borderRadius: 3,
-                  bgcolor: selected ? "#FDB022" : "transparent",
-                  transition: "background-color 0.2s ease",
-
-                  "&.Mui-selected": {
-                    bgcolor: "#FDB022",
-                    "&:hover": {
-                      bgcolor: "#FDB022",
-                    },
-                  },
-
-                  "&:hover": {
-                    bgcolor: selected
-                      ? "rgba(253, 176, 34, 0.9)"
-                      : "rgba(253, 176, 34, 0.1)",
-                  },
-                }}
-              >
-                <ListItemIcon
-                  sx={{ minWidth: 36, color: selected ? "#060F20" : "#FFF" }}
-                >
-                  {link.icon}
-                </ListItemIcon>
+              <React.Fragment key={section.title}>
                 <ListItemText
-                  primary={link.label}
+                  primary={section.title}
+                  sx={{ mx: 3, mt: 2 }}
                   slotProps={{
                     primary: {
                       sx: {
-                        color: selected ? "#060F20" : "#FFF",
-                        fontWeight: selected ? 600 : 400,
-                        fontSize: 18,
+                        color: "#94979C",
+                        fontWeight: 700,
+                        fontSize: 12,
+                        letterSpacing: "0.08em",
                       },
                     },
                   }}
                 />
-              </ListItemButton>
+                {section.links.map((link) => {
+                  const selected =
+                    link.match(pathname) ||
+                    (pathname === "/" && link.to === "/dashboard");
+                  return (
+                    <ListItemButton
+                      key={link.to}
+                      component={RouterLink}
+                      to={link.to}
+                      selected={selected}
+                      sx={{
+                        mx: 2,
+                        my: 0.5,
+                        py: 0.5,
+                        borderRadius: 1.5,
+                        bgcolor: selected ? "#FDB022" : "transparent",
+                        transition: "background-color 0.2s ease",
+
+                        "&.Mui-selected": {
+                          bgcolor: "#22262F",
+                          "&:hover": {
+                            bgcolor: "#22262F",
+                          },
+                        },
+
+                        "&:hover": {
+                          bgcolor: selected
+                            ? "rgba(253, 176, 34, 0.9)"
+                            : "rgba(253, 176, 34, 0.1)",
+                        },
+                      }}
+                    >
+                      <ListItemIcon sx={{ minWidth: 36 }}>
+                        <Icon
+                          name={link.icon}
+                          size={20}
+                          fill={selected ? "#FDB022" : "#94979C"}
+                        />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={link.label}
+                        slotProps={{
+                          primary: {
+                            sx: {
+                              color: selected ? "#ECECED" : "#CECFD2",
+                              fontWeight: selected ? 600 : 400,
+                              fontSize: 18,
+                            },
+                          },
+                        }}
+                      />
+                    </ListItemButton>
+                  );
+                })}
+              </React.Fragment>
             );
           })}
         </List>
