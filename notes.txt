@@ -1,2 +1,5 @@
 textos: Manrope
 título das páginas: Bricolage Grotesque
+
+
+configurar o eslint para usar sempre arrow functions no projeto

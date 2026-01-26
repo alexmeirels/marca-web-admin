@@ -127,13 +127,7 @@ export default function Sidebar() {
             textTransform: "none",
             fontSize: 16,
             fontWeight: 500,
-            alignItems: "center",
-            "& .MuiButton-startIcon": {
-              marginLeft: 0,
-              marginRight: 6,
-              display: "inline-flex",
-              alignItems: "center",
-            },
+            justifyContent: "center",
             "&:hover": {
               bgcolor: "#FDB022",
               boxShadow: "none",
@@ -143,20 +137,22 @@ export default function Sidebar() {
               boxShadow: "none",
             },
           }}
-          startIcon={<Icon name="plus" size={20} stroke="#060F20" />}
           onClick={() => {}}
         >
-          <Typography
-            sx={{
-              fontSize: 14,
-              fontWeight: 600,
-              color: "#060F20",
-              lineHeight: 1,
-            }}
-            fontWeight="bold"
-          >
-            {"Nova Reserva"}
-          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Icon name="plus" size={20} stroke="#060F20" />
+            <Typography
+              sx={{
+                fontSize: 14,
+                fontWeight: 600,
+                color: "#060F20",
+                lineHeight: 1,
+              }}
+              fontWeight="bold"
+            >
+              {"Nova Reserva"}
+            </Typography>
+          </Box>
         </Button>
         <List sx={{ py: 1 }}>
           {sections.map((section) => {

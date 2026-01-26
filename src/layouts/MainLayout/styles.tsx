@@ -2,28 +2,34 @@ import styled from "styled-components";
 
 export const Container = styled.div`
   display: flex;
-  min-width: calc(100vw - 16px);
-  min-height: calc(100vh);
-  
-  background-color: #f5f5f5;
-  overflow: hidden;
+  width: 100%;
+  height: 100vh;
+  --main-header-height: 64px;
 
-  main {
-    flex: 1;
-    padding: 32px;
-  }
+  background-color: #FFFFFF;
+  overflow: hidden;
 `;
 
 export const Content = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  width: 100%
+  width: 100%;
   height: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+  overflow: hidden;
+  margin-left: 300px;
+  padding-top: var(--main-header-height);
 `;
 
 export const OutletContainer = styled.div`
-  margin: 0px 16px;
+  padding: 32px;
+  padding-bottom: 32px;
   display: flex;
+  flex-direction: column;
+  align-items: stretch;
   flex: 1;
+  min-height: 0;
+  overflow: auto;
 `;
