@@ -24,7 +24,7 @@ export const Content = styled.div`
 `;
 
 export const OutletContainer = styled.div`
-  padding: 32px;
+  padding: 48px 32px;
   padding-bottom: 32px;
   display: flex;
   flex-direction: column;

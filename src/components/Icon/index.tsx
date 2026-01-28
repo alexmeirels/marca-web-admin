@@ -9,6 +9,10 @@ import usersGroupSvg from "../../assets/icons/users-group.svg?raw";
 import walletSvg from "../../assets/icons/wallet.svg?raw";
 import chevronUp from "../../assets/icons/chevron-up.svg?raw";
 
+import calendarDs from "../../assets/icons/calendar-ds.svg?raw";
+import chevronLeftDs from "../../assets/icons/chevron-left-ds.svg?raw";
+import chevronRightDs from "../../assets/icons/chevron-right-ds.svg?raw";
+
 export type IconName =
   | "dashboard"
   | "calendar"
@@ -20,14 +24,15 @@ export type IconName =
   | "wallet"
   | "chevronUp";
 
+export type IconNameDs = "calendarDs" | "chevronLeftDs" | "chevronRightDs";
 type IconProps = {
-  name: IconName;
+  name: IconName | IconNameDs;
   size?: number;
   fill?: string;
   stroke?: string;
 };
 
-const ICONS: Record<IconName, string> = {
+const ICONS: Record<IconName | IconNameDs, string> = {
   dashboard: dashboardSvg,
   calendar: calendarSvg,
   lock: lockSvg,
@@ -37,6 +42,9 @@ const ICONS: Record<IconName, string> = {
   usersGroup: usersGroupSvg,
   wallet: walletSvg,
   chevronUp: chevronUp,
+  calendarDs: calendarDs,
+  chevronLeftDs: chevronLeftDs,
+  chevronRightDs: chevronRightDs,
 };
 
 const stripSizeAttrs = (attrs: string) =>

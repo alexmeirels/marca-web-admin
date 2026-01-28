@@ -5,18 +5,19 @@ import {
   CalendarTodayRounded as CalendarTodayRoundedIcon,
 } from "@mui/icons-material";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import { Popover, Paper } from "@mui/material";
 import {
   Root,
   Row,
+  DateButton,
   NavButton,
+  DateIconWrapper,
   DateText,
-  CalendarButton,
-  CalendarPopover,
-  CalendarPaper,
 } from "./styles";
 import type { ISelectedDateProps } from "./types";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
+import Icon from "../Icon";
 
 const defaultFormat = (date: Date) =>
   new Intl.DateTimeFormat("pt-BR", {
@@ -63,52 +64,35 @@ export default function SelectedDate({
 
   return (
     <Root className={className} $fullWidth={fullWidth}>
-      <Row direction="row" alignItems="center" gap={1.5} $size={size}>
-        <NavButton
-          $size={size}
-          size="small"
-          onClick={onPrev}
-          disabled={disabled}
-          disableRipple
-          disableFocusRipple
-        >
-          <ChevronLeftRoundedIcon />
-        </NavButton>
-
-        <NavButton
-          $size={size}
-          size="small"
-          onClick={onNext}
-          disabled={disabled}
-          disableRipple
-          disableFocusRipple
-        >
-          <ChevronRightRoundedIcon />
-        </NavButton>
-
-        <CalendarButton
-          aria-label="Abrir calendário"
+      <Row>
+        <DateButton
+          type="button"
           onClick={openCalendar}
-          $size={size}
           disabled={disabled}
-          disableRipple
-          disableFocusRipple
+          aria-label="Abrir calendário"
         >
-          <CalendarTodayRoundedIcon />
-        </CalendarButton>
+          <DateIconWrapper>
+            <Icon name="calendarDs" size={20} stroke="#414651" />
+          </DateIconWrapper>
+          <DateText>{formatLabel(value)}</DateText>
+        </DateButton>
 
-        <DateText $size={size} variant="h6">
-          {formatLabel(value)}
-        </DateText>
+        <NavButton onClick={onPrev} disabled={disabled}>
+          <Icon name="chevronLeftDs" size={20} stroke="#414651" />
+        </NavButton>
 
-        <CalendarPopover
+        <NavButton onClick={onNext} disabled={disabled}>
+          <Icon name="chevronRightDs" size={20} stroke="#414651" />
+        </NavButton>
+
+        <Popover
           open={open}
           anchorEl={anchorEl}
           onClose={closeCalendar}
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
           transformOrigin={{ vertical: "top", horizontal: "right" }}
         >
-          <CalendarPaper elevation={4}>
+          <Paper elevation={4} sx={{ p: 1, borderRadius: 3 }}>
             <DateCalendar
               value={value ? dayjs(value) : null}
               onChange={handleSelectDate}
@@ -117,8 +101,8 @@ export default function SelectedDate({
               disabled={disabled}
               slotProps={{ day: { disableRipple: true } }}
             />
-          </CalendarPaper>
-        </CalendarPopover>
+          </Paper>
+        </Popover>
       </Row>
     </Root>
   );
