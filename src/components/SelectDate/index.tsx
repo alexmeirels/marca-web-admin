@@ -1,9 +1,4 @@
 import * as React from "react";
-import {
-  ChevronLeftRounded as ChevronLeftRoundedIcon,
-  ChevronRightRounded as ChevronRightRoundedIcon,
-  CalendarTodayRounded as CalendarTodayRoundedIcon,
-} from "@mui/icons-material";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { Popover, Paper } from "@mui/material";
 import {
@@ -38,7 +33,6 @@ export default function SelectedDate({
   minDate,
   maxDate,
   disabled,
-  size = "medium",
   fullWidth,
   className,
 }: ISelectedDateProps) {

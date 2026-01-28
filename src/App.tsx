@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import "./App.css";
-import { createSchedule, getSchedules } from "./api/schedulesService";
+import { getSchedules } from "./api/schedulesService";
 import AppRoutes from "./routes";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -8,7 +8,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 function App() {
   useEffect(() => {
     getSchedules();
-    createSchedule();
   }, []);
 
   return (

@@ -8,7 +8,6 @@ import {
   HeaderCell,
   CourtHeader,
   SlotCell,
-  SlotDot,
   BookingCard,
   BookingTitle,
   BookingMeta,

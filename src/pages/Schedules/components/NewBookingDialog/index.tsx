@@ -60,7 +60,7 @@ export default function NewBookingDialog({
   const [time, setTime] = React.useState<string>("20:00");
   const [duration, setDuration] = React.useState<number>(1);
   const [paymentStatus, setPaymentStatus] = React.useState<"pending" | "paid">(
-    "pending"
+    "pending",
   );
 
   React.useEffect(() => {
@@ -69,7 +69,7 @@ export default function NewBookingDialog({
 
   const selectedCourt = React.useMemo(
     () => courts.find((c) => c.id === courtId) ?? courts[0],
-    [courtId, courts]
+    [courtId, courts],
   );
 
   const total = React.useMemo(() => {
@@ -100,20 +100,10 @@ export default function NewBookingDialog({
   const peopleValue = watch("people");
 
   const onSave = (data: NewBookingFormData) => {
-    onSubmit({
-      courtId,
-      courtName: selectedCourt?.name,
-      date: date.toDate(),
-      time,
-      durationHours: duration,
-      responsibleName: data.responsibleName,
-      phone: data.phone,
-      email: data.email,
-      people: data.people,
-      paymentStatus,
-      total,
-    });
     // opcional: resetar o form ao fechar
+    console.log(data);
+    onSubmit({})
+
     reset();
     onClose();
   };

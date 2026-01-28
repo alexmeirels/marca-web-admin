@@ -8,7 +8,7 @@ export interface Court {
 export interface NewBookingDialogProps {
   open: boolean;
   onClose: () => void;
-  onSubmit: (payload: any) => void; 
+  onSubmit: (payload: object) => void; 
   defaultDate: Date;
   courts: Court[];
 }
