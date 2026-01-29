@@ -1,4 +1,6 @@
+import * as React from "react";
 import Icon from "../../../../components/Icon";
+import NewBookingModal from "../NewBookingModal";
 import {
   Card,
   Header,
@@ -107,6 +109,8 @@ const getRowForTime = (time: string) => {
 };
 
 export default function ScheduleGrid() {
+  const [openModal, setOpenModal] = React.useState(false);
+
   return (
     <Card>
       <Header>
@@ -128,6 +132,7 @@ export default function ScheduleGrid() {
               key={`${time}-${courtIndex}`}
               type="button"
               $occupied={isSlotOccupied(time, courtIndex)}
+              onClick={() => setOpenModal(true)}
               style={{
                 gridRow: getRowForTime(time),
                 gridColumn: courtIndex + 2,
@@ -153,6 +158,7 @@ export default function ScheduleGrid() {
           </BookingCard>
         ))}
       </Grid>
+      <NewBookingModal open={openModal} onClose={() => setOpenModal(false)} />
     </Card>
   );
 }

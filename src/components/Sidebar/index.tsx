@@ -49,10 +49,10 @@ const sections: ISectionItem[] = [
     title: "OPERAÇÃO",
     links: [
       {
-        to: "/schedules",
+        to: "/reservations",
         label: "Reservas",
         icon: "lock",
-        match: (p) => p.startsWith("/a"),
+        match: (p) => p.startsWith("/reservations"),
       },
       {
         to: "/schedules",
@@ -61,10 +61,10 @@ const sections: ISectionItem[] = [
         match: (p) => p.startsWith("/a"),
       },
       {
-        to: "/schedules",
+        to: "/customers",
         label: "Clientes",
         icon: "usersGroup",
-        match: (p) => p.startsWith("/a"),
+        match: (p) => p.startsWith("/customers"),
       },
     ],
   },

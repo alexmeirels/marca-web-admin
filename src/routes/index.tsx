@@ -4,6 +4,8 @@ import MainLayout from "../layouts/MainLayout";
 import Home from "../pages/Home";
 import Dashboard from "../pages/Dashboard";
 import Schedules from "../pages/Schedules";
+import Reservation from "../pages/Reservation";
+import Customers from "../pages/Customers";
 // import NotFound from "../pages/NotFound";
 
 export default function AppRoutes() {
@@ -15,6 +17,8 @@ export default function AppRoutes() {
           <Route index element={<Home />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="schedules" element={<Schedules />} />
+          <Route path="reservations" element={<Reservation />} />
+          <Route path="customers" element={<Customers />} />
         </Route>
 
         {/* <Route path="*" element={<NotFound />} /> */}
