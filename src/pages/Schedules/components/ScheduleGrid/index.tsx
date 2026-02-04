@@ -1,6 +1,10 @@
 import * as React from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import Icon from "../../../../components/Icon";
 import NewBookingModal from "../NewBookingModal";
+import { NewBookingSchema, type NewBookingFormValues } from "../../schema";
+import type { ScheduleResponse } from "../../../../api/schedulesService";
 import {
   Card,
   Header,
@@ -43,64 +47,9 @@ type Booking = {
   durationMinutes: number;
 };
 
-const bookings: Booking[] = [
-  {
-    title: "Carlos Souza",
-    meta: "Society • 12:00 - 13:00",
-    courtIndex: 2,
-    start: "12:00",
-    durationMinutes: 60,
-  },
-  {
-    title: "Maria Santos",
-    meta: "Beach Tennis • 13:00 - 14:00",
-    courtIndex: 1,
-    start: "13:00",
-    durationMinutes: 60,
-  },
-  {
-    title: "João Silva",
-    meta: "Society • 14:00 - 15:30",
-    courtIndex: 0,
-    start: "14:00",
-    durationMinutes: 90,
-  },
-  {
-    title: "Ana Lima",
-    meta: "Beach Tennis • 15:30 - 16:30",
-    courtIndex: 1,
-    start: "15:30",
-    durationMinutes: 60,
-  },
-  {
-    title: "Pedro Costa",
-    meta: "Society • 16:00 - 17:00",
-    courtIndex: 0,
-    start: "16:00",
-    durationMinutes: 60,
-  },
-  {
-    title: "Juliana Alves",
-    meta: "Futevolei • 14:00 - 15:00",
-    courtIndex: 3,
-    start: "14:00",
-    durationMinutes: 60,
-  },
-];
-
 const timeToMinutes = (time: string) => {
   const [hours, minutes] = time.split(":").map(Number);
   return hours * 60 + minutes;
-};
-
-const isSlotOccupied = (time: string, courtIndex: number) => {
-  const slotStart = timeToMinutes(time);
-  return bookings.some((booking) => {
-    if (booking.courtIndex !== courtIndex) return false;
-    const bookingStart = timeToMinutes(booking.start);
-    const bookingEnd = bookingStart + booking.durationMinutes;
-    return slotStart >= bookingStart && slotStart < bookingEnd;
-  });
 };
 
 const getRowForTime = (time: string) => {
@@ -108,8 +57,120 @@ const getRowForTime = (time: string) => {
   return index === -1 ? 2 : index + 2;
 };
 
-export default function ScheduleGrid() {
+type ScheduleGridProps = {
+  selectedDate: Date;
+  isCreating?: boolean;
+  onCreateSchedule: (values: NewBookingFormValues) => Promise<unknown>;
+  onRefreshSchedules: () => Promise<unknown>;
+  schedules: ScheduleResponse[] | null;
+};
+
+const buildDateTimeFromSlot = (date: Date, time: string) => {
+  const [hours, minutes] = time.split(":").map(Number);
+  return new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    hours,
+    minutes,
+    0,
+    0,
+  );
+};
+
+export default function ScheduleGrid({
+  selectedDate,
+  isCreating = false,
+  onCreateSchedule,
+  onRefreshSchedules,
+  schedules,
+}: ScheduleGridProps) {
   const [openModal, setOpenModal] = React.useState(false);
+  const form = useForm<NewBookingFormValues>({
+    resolver: zodResolver(NewBookingSchema),
+    defaultValues: {
+      title: "",
+      rentalDuration: 60,
+      scheduleType: "SINGLE",
+      startedAt: new Date(),
+      endedAt: new Date(),
+      status: "PENDING",
+      peopleAmount: undefined,
+      totalValue: 0,
+      paymentStatus: "PENDING",
+    },
+  });
+  const handleOpenModalAtTime = React.useCallback(
+    (time: string) => {
+      const startDateTime = buildDateTimeFromSlot(selectedDate, time);
+      form.setValue("startedAt", startDateTime, { shouldValidate: true });
+      form.setValue("endedAt", startDateTime, { shouldValidate: true });
+      setOpenModal(true);
+    },
+    [form, selectedDate],
+  );
+
+  console.log("form", form.formState.errors);
+
+  const handleCreateSchedule = React.useCallback(
+    async (values: NewBookingFormValues) => {
+      const payload = {
+        ...values,
+        rentalDuration:
+          typeof values.rentalDuration === "number"
+            ? values.rentalDuration
+            : undefined,
+        totalValue:
+          typeof values.totalValue === "number" ? values.totalValue : 0,
+      };
+      await onCreateSchedule(payload);
+      const refreshed = await onRefreshSchedules();
+      return Boolean(refreshed);
+    },
+    [onCreateSchedule, onRefreshSchedules],
+  );
+
+  const bookings = React.useMemo<Booking[]>(() => {
+    if (!schedules) return [];
+    return schedules.map((schedule) => {
+      const startedAt = new Date(schedule.startedAt);
+      const endedAt = new Date(schedule.endedAt);
+      const start = `${String(startedAt.getHours()).padStart(2, "0")}:${String(
+        startedAt.getMinutes(),
+      ).padStart(2, "0")}`;
+      const durationMinutes = Number.isFinite(
+        endedAt.getTime() - startedAt.getTime(),
+      )
+        ? Math.max(
+            0,
+            Math.round((endedAt.getTime() - startedAt.getTime()) / 60000),
+          )
+        : (schedule.rentalDuration ?? 0);
+      const rawIndex =
+        typeof schedule.courtId === "number" ? schedule.courtId - 1 : 0;
+      const courtIndex = Math.min(Math.max(rawIndex, 0), courts.length - 1);
+      return {
+        title: schedule.title || "Reserva",
+        meta: schedule.status,
+        courtIndex,
+        start,
+        durationMinutes,
+      };
+    });
+  }, [schedules]);
+
+  const isSlotOccupied = React.useCallback(
+    (time: string, courtIndex: number) => {
+      const slotStart = timeToMinutes(time);
+      return bookings.some((booking) => {
+        if (booking.courtIndex !== courtIndex) return false;
+        const bookingStart = timeToMinutes(booking.start);
+        const bookingEnd = bookingStart + booking.durationMinutes;
+        return slotStart >= bookingStart && slotStart < bookingEnd;
+      });
+    },
+    [bookings],
+  );
 
   return (
     <Card>
@@ -122,17 +183,17 @@ export default function ScheduleGrid() {
           <CourtHeader key={court}>{court}</CourtHeader>
         ))}
 
-        {times.map((time) => (
+        {times.map((time: string) => (
           <TimeCell key={time}>{time}</TimeCell>
         ))}
 
-        {times.map((time) =>
+        {times.map((time: string) =>
           courts.map((_court, courtIndex) => (
             <SlotCell
               key={`${time}-${courtIndex}`}
               type="button"
               $occupied={isSlotOccupied(time, courtIndex)}
-              onClick={() => setOpenModal(true)}
+              onClick={() => handleOpenModalAtTime(time)}
               style={{
                 gridRow: getRowForTime(time),
                 gridColumn: courtIndex + 2,
@@ -158,7 +219,13 @@ export default function ScheduleGrid() {
           </BookingCard>
         ))}
       </Grid>
-      <NewBookingModal open={openModal} onClose={() => setOpenModal(false)} />
+      <NewBookingModal
+        open={openModal}
+        onClose={() => setOpenModal(false)}
+        form={form}
+        onSubmit={handleCreateSchedule}
+        isLoading={isCreating}
+      />
     </Card>
   );
 }

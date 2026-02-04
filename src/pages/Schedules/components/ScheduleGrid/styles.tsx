@@ -34,6 +34,7 @@ export const Grid = styled.div<{ $rows: number }>`
   position: relative;
 `;
 
+
 export const HeaderCell = styled.div`
   font-size: 14px;
   font-weight: 600;

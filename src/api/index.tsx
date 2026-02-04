@@ -4,7 +4,9 @@ const user = import.meta.env.VITE_API_USER || "admin";
 const password = import.meta.env.VITE_API_PASSWORD || "password";
 
 const token = btoa(`${user}:${password}`);
-const isLocal = false;
+const isLocal = true;
+
+console.log("token", token);
 
 export const api = axios.create({
   baseURL: isLocal
@@ -25,7 +27,7 @@ api.interceptors.response.use(
   (error) => {
     console.error("Não autorizado, redirecionar login");
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

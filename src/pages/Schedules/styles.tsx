@@ -5,7 +5,8 @@ export const Container = styled.div`
   flex: 1;
   flex-direction: column;
   border-radius: 16px;
-  gap: 24px
+  gap: 24px;
+  position: relative;
 `;
 
 export const HeaderContainer = styled.div`

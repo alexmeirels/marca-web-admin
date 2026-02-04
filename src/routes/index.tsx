@@ -1,7 +1,6 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import MainLayout from "../layouts/MainLayout";
-import Home from "../pages/Home";
 import Dashboard from "../pages/Dashboard";
 import Schedules from "../pages/Schedules";
 import Reservation from "../pages/Reservation";
@@ -14,7 +13,7 @@ export default function AppRoutes() {
       <Routes>
         {/* Área logada com sidebar (sem fluxo de login agora) */}
         <Route path="/" element={<MainLayout />}>
-          <Route index element={<Home />} />
+          <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="schedules" element={<Schedules />} />
           <Route path="reservations" element={<Reservation />} />

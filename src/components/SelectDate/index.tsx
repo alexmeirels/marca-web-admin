@@ -86,7 +86,10 @@ export default function SelectedDate({
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
           transformOrigin={{ vertical: "top", horizontal: "right" }}
         >
-          <Paper elevation={4} sx={{ p: 1, borderRadius: 3 }}>
+          <Paper
+            elevation={4}
+            sx={{ p: 0, borderRadius: 3, width: "fit-content" }}
+          >
             <DateCalendar
               value={value ? dayjs(value) : null}
               onChange={handleSelectDate}

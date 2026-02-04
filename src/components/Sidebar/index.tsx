@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useLocation, Link as RouterLink } from "react-router-dom";
+import { useLocation, Link as RouterLink, useNavigate } from "react-router-dom";
 import {
   Toolbar,
   List,
@@ -89,6 +89,7 @@ const sections: ISectionItem[] = [
 
 export default function Sidebar() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   return (
     <Container>
@@ -137,7 +138,7 @@ export default function Sidebar() {
               boxShadow: "none",
             },
           }}
-          onClick={() => {}}
+          onClick={() => navigate("/schedules")}
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <Icon name="plus" size={20} stroke="#060F20" />
