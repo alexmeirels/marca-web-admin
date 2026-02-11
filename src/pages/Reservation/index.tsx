@@ -1,7 +1,7 @@
-import styled from "styled-components";
 import HeaderPage from "../../components/HeaderPage";
 import ReservationFilters from "./components/ReservationFilters";
 import ReservationList from "./components/ReservationList";
+import { Container } from "./styles";
 
 export default function Reservation() {
   return (
@@ -15,9 +15,3 @@ export default function Reservation() {
     </Container>
   );
 }
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-`;

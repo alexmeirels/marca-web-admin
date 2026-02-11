@@ -7,6 +7,7 @@ import Reservation from "../pages/Reservation";
 import Customers from "../pages/Customers";
 import Login from "../pages/Login";
 import useAuth from "../hooks/useAuth";
+import Courts from "../pages/Courts";
 // import NotFound from "../pages/NotFound";
 
 type RouteGuardProps = {
@@ -58,6 +59,7 @@ export default function AppRoutes() {
           <Route path="schedules" element={<Schedules />} />
           <Route path="reservations" element={<Reservation />} />
           <Route path="customers" element={<Customers />} />
+          <Route path="courts" element={<Courts />} />
         </Route>
 
         {/* <Route path="*" element={<NotFound />} /> */}

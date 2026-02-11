@@ -12,7 +12,22 @@ import {
   Button,
 } from "@mui/material";
 import logoSidebar from "../../assets/logo-sidebar.png";
-import { Container } from "./styles";
+import {
+  Avatar,
+  Container,
+  Content,
+  Footer,
+  FooterActions,
+  FooterItem,
+  FooterItemDanger,
+  FooterMenu,
+  MenuTrigger,
+  ProfileCard,
+  ProfileEmail,
+  ProfileInfo,
+  ProfileName,
+  UserInfoContainer,
+} from "./styles";
 import Icon, { type IconName } from "../Icon";
 
 type ILinkItem = {
@@ -72,10 +87,10 @@ const sections: ISectionItem[] = [
     title: "GESTÃO",
     links: [
       {
-        to: "/schedules",
+        to: "/courts",
         label: "Minhas Quadras",
         icon: "balls",
-        match: (p) => p.startsWith("/a"),
+        match: (p) => p.startsWith("/courts"),
       },
       {
         to: "/schedules",
@@ -90,6 +105,7 @@ const sections: ISectionItem[] = [
 export default function Sidebar() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const [menuOpen, setMenuOpen] = React.useState(false);
 
   return (
     <Container>
@@ -109,15 +125,7 @@ export default function Sidebar() {
         />
       </Toolbar>
       <Divider />
-      <Box
-        sx={{
-          overflow: "auto",
-          display: "flex",
-          flexDirection: "column",
-          flex: 1,
-          minHeight: 0, // importante p/ o overflow funcionar dentro do flex
-        }}
-      >
+      <Content>
         <Button
           variant="contained"
           sx={{
@@ -231,16 +239,64 @@ export default function Sidebar() {
             );
           })}
         </List>
+      </Content>
+      <Footer>
+        <FooterActions>
+          <ProfileCard type="button" $active={menuOpen}>
+            <UserInfoContainer>
+              <Avatar>J</Avatar>
+              <ProfileInfo>
+                <ProfileName>Jackson Ferreira Jr</ProfileName>
+                <ProfileEmail>admjack@marcamais.com.br</ProfileEmail>
+              </ProfileInfo>
+            </UserInfoContainer>
+            <MenuTrigger
+              type="button"
+              aria-label="Abrir menu"
+              $active={menuOpen}
+              onClick={(event) => {
+                event.stopPropagation();
+                setMenuOpen((prev) => !prev);
+              }}
+            >
+              ⋮
+            </MenuTrigger>
+          </ProfileCard>
 
-        <Box sx={{ mt: "auto" }}>
-          <Divider />
-          <Box sx={{ p: 2, textAlign: "center" }}>
-            <Typography variant="caption" color="text.secondary">
-              v0.1.0
-            </Typography>
-          </Box>
+          <FooterMenu $open={menuOpen}>
+            <FooterItem type="button">
+              <span role="img" aria-label="Suporte">
+                🎧
+              </span>
+              Supporte
+            </FooterItem>
+            <FooterItem type="button">
+              <span role="img" aria-label="Configurações">
+                ⚙️
+              </span>
+              Configurações
+            </FooterItem>
+            <FooterItemDanger
+              type="button"
+              onClick={() => {
+                localStorage.clear();
+                window.location.href = "/login";
+              }}
+            >
+              <span role="img" aria-label="Sair">
+                ⛔
+              </span>
+              Sair
+            </FooterItemDanger>
+          </FooterMenu>
+        </FooterActions>
+
+        <Box sx={{ textAlign: "center" }}>
+          <Typography variant="caption" color="#FFF">
+            v0.1.0
+          </Typography>
         </Box>
-      </Box>
+      </Footer>
     </Container>
   );
 }
