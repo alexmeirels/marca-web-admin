@@ -1,18 +1,16 @@
-import { useEffect } from "react";
 import "./App.css";
-import { getSchedules } from "./api/schedulesService";
 import AppRoutes from "./routes";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { AuthProvider } from "./contexts/AuthProvider";
 
 function App() {
-  useEffect(() => {
-    getSchedules();
-  }, []);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <AppRoutes />;
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
     </LocalizationProvider>
   );
 }

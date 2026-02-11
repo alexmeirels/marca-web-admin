@@ -1,24 +1,27 @@
 import axios from "axios";
 
-const user = import.meta.env.VITE_API_USER || "admin";
-const password = import.meta.env.VITE_API_PASSWORD || "password";
-
-const token = btoa(`${user}:${password}`);
 const isLocal = true;
-
-console.log("token", token);
 
 export const api = axios.create({
   baseURL: isLocal
     ? import.meta.env.VITE_LOCAL_API_URL
     : import.meta.env.VITE_API_URL,
   timeout: 10000,
-  headers: {
-    Authorization: `Basic ${token}`,
-  },
+});
+
+export const publicApi = axios.create({
+  baseURL: isLocal
+    ? import.meta.env.VITE_LOCAL_API_URL
+    : import.meta.env.VITE_API_URL,
+  timeout: 10000,
 });
 
 api.interceptors.request.use((config) => {
+  const storedToken = localStorage.getItem("token");
+  if (storedToken) {
+    config.headers = config.headers ?? {};
+    config.headers.Authorization = `Bearer ${storedToken}`;
+  }
   return config;
 });
 
